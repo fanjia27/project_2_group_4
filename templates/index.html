@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/assets/img/att.jpg">
+
+    <title>AWS Servers Management</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/dashboard.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Cloud Computing Servers Management</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="http://127.0.0.1:5000/api/data">API Data</a></li>
+            <!--<li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li> -->
+          </ul>
+          <!-- <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form> -->
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <!-- <div class="row">-->
+
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active text-left"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+            <!-- <li><a href="#">Reports</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Export</a></li> -->
+          </ul>
+          <ul class="nav nav-sidebar">
+                            <div class="panel panel-default">
+                              <div class="panel-heading text-left">Select App:</div>
+                              <div class="panel-body">
+                                <form>
+                                  <div class="form-group" >
+                                    <ul class="list-group" id="filters">
+                                      <li class="filter list-group-item">
+                                        <!--<label for="date">Enter App Name:</label>                              
+                                        <input class="form-control" id="datetime" type="text" placeholder="enter parameter 1" onfocus="" onblur="'enter parameter 1'">
+                                        <br>
+                                        <label for="city" color="blue">Enter CPU (%):</label>
+                                        <input class="form-control" id="city" type="text" placeholder="enter parameter 2" onfocus="" onblur="'enter parameter 2'">
+                                        <br>
+                                        <label for="city">Enter parameter 3:</label>
+                                        <input class="form-control" id="state" type="text" placeholder="enter parameter 3" onfocus="" onblur="'enter parameter 3'">
+                                        <br>
+                                        <label for="city">Enter parameter 4:</label>
+                                        <input class="form-control" id="country" type="text" placeholder="enter parameter 4" onfocus="" onblur="'enter parameter 4'" >
+                                        adapter
+                                       -->
+                                        <select id="selDataApp" onchange="optionChanged(this.value)">
+                                          <option value="APIGateway">APIGateway</option>
+                                          <option value="Appd">Appd</option>
+                                          <option value="BigData">BigData</option>
+                                          <option value="cache">Cache</option>
+                                          <option value="Compile">Compile</option>
+                                          <option value="ContentApp">ContentApp</option>
+                                          <option value="Couchbase">Couchbase</option>
+                                          <option value="Couchbase_Operator">Couchbase Operator</option>
+                                          <option value="custodian">Custodian</option>
+                                          <option value="Database">Database</option>
+                                          <option value="dataplatform">DataPlatform</option>
+                                          <option value="datawarehouse">DataWarehouse</option>
+                                          <option value="elasticsearch">ElasticSearch</option>
+                                          <option value="elasticsearch-2">ElasticSearch-2</option>
+                                          <option value="Encryption">Encryption</option>
+                                          <option value="enforce-test">Enforce-test</option>
+                                          <option value="lambda">Lambda</option>
+                                          <option value="locust">Locust</option>
+                                          <option value="Messaging">Messaging</option>
+                                          <option value="Metrics">Metrics</option>
+                                          <option value="microservices">MicroServices</option>
+                                          <option value="mobile">Mobile</option>
+                                          <option value="MongoDB">MongoDB</option>
+                                          <option value="MySQL">MySQL</option>
+                                          <option value="Performance">Performance</option>
+                                          <option value="Security">Security</option>
+                                          <option value="Test">Test</option>
+                                          <option value="Test_deploy">Test-deploy</option>
+                                          <option value="Tools-Test">Tools-Test</option>
+                                          <option value="UI">UI</option>
+                                        </select>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  <!-- <button id="filter-btn" type="submit" class="btn btn-default" color="white">Click to View</button> -->
+                                </form>
+                              </div>
+                            </div>
+
+          </ul>
+          
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Dashboard</h1>
+        </div>
+         
+              <div class="content">
+                  <div class="container-fluid">
+                      <div class="row">
+
+                          <div class="col-md-3">
+                              <div class="card ">
+                                  <div class="card-header ">
+                                      <h4 class="card-title">Gauge Chart 1</h4>
+                                      <p class="card-category">CPU Performance</p>
+                                  </div>
+                                  <div class="card-body">
+                                      <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                                      <!-- this is template demo purpose-->
+                                      <!-- <img class="img" src="https://pbs.twimg.com/media/CZbtfdyUsAAT-eW.png" width="150" height="80"> -->
+                                     
+                                      <div id="cpu_gauge">
+                                        <!-- js codes go here-->
+                                      </div>
+                                  </div>
+                              
+                                  </div>
+                              </div>
+
+                            <div class="col-md-3">
+                                <div class="card ">
+                                    <div class="card-header ">
+                                        <h4 class="card-title">Gauge Chart 2</h4>
+                                        <p class="card-category">Memory Performance</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                                        <!-- this is template demo purpose-->
+                                        <img class="img" src="https://pbs.twimg.com/media/CZbtfdyUsAAT-eW.png" width="150" height="80">
+                                        <!-- js codes go here-->
+                                    </div>
+                                  
+                                    </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                <div class="card ">
+                                    <div class="card-header ">
+                                        <h4 class="card-title">Gauge Chart 3</h4>
+                                        <p class="card-category">Disk Performance</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                                        <!-- this is template demo purpose-->
+                                        <img class="img" src="https://pbs.twimg.com/media/CZbtfdyUsAAT-eW.png" width="150" height="80">
+                                        <!-- js codes go here-->
+                                    </div>
+                                  
+                                    </div>
+                              </div>
+
+                                <div class="col-md-3">
+                                  <div class="card ">
+                                      <div class="card-header ">
+                                          <h4 class="card-title">Gauge Chart 4</h4>
+                                          <p class="card-category">Disk Performance</p>
+                                      </div>
+                                      <div class="card-body">
+                                          <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                                          <!-- this is template demo purpose-->
+                                          <img class="img" src="https://pbs.twimg.com/media/CZbtfdyUsAAT-eW.png" width="150" height="80">
+                                          <!-- js codes go here-->
+                                      </div>
+                                    
+                                      </div>
+                                </div>
+  
+                          </div>
+
+                             
+
+                        
+                        <div class="row">
+                              <div class="col-md-8">
+                                  <div class="card ">
+                                      <div class="card-header ">
+                                          <h4 class="card-title">AWS Statistics | Bar Chart</h4>
+                                          <p class="card-category">Server and Average Performance</p>
+                                      </div>
+                                      <div class="card-body">
+                                          <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                                          <!-- this is template demo purpose-->
+                                          <img class="img" src="https://plot.ly/~MattSundquist/19281/testing.png" width="650" height="160">                                          
+                                          <!-- js codes go here-->
+                                      </div>
+                                  
+                                      </div>
+                                  </div>
+
+                                  <div class="col-md-4">
+                                    <div class="card ">
+                                        <div class="card-header ">
+                                            <h4 class="card-title">AWS Statistics | Pie Chart</h4>
+                                            <p class="card-category">Server and Average Performance</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                                            <!-- this is template demo purpose-->
+                                            <img class="img" src="https://www.mathworks.com/help/examples/graphics/win64/AddPieChartLabelsThatContainCalculatedPercentagesExample_01.png" width="230" height="200">  
+                                            <!-- js codes go here-->
+                                        </div>
+                                    
+                                        </div>
+                                    </div>
+
+                          </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h4 class="page-header">App's Server Summary:</h4>
+                            <!-- this is the narrative section, js goes into p -->
+                            <p> this is the narrative...</p>
+                          </div>
+                        </div>
+        <!-- </div> -->
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/build_gauge.js"></script>
+
+  </body>
+</html>
