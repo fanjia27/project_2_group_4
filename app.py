@@ -22,7 +22,7 @@ from sqlalchemy.orm import sessionmaker
 
 pymysql.install_as_MySQLdb()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='public', static_url_path='')
 
 #################################################
 # Database Setup
@@ -37,7 +37,7 @@ app = Flask(__name__)
 
 #engine = create_engine("mysql://{username}:{password}@{host}:{port}/{database}")
 
-engine = create_engine("mysql://root:password@localhost:3306/cloudresources")
+engine = create_engine("mysql://root:ming1119@localhost:3306/cloudresources")
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -58,6 +58,19 @@ Cloudresources_data = Base.classes.cloud_resource_data
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/api")
+def welcomeApi():
+    """List all available api routes."""
+    return (
+        f"Available Routes:<br/>"
+        f"/api/data<br/>"
+        f"/api/data_summary<br/>"
+        f"/api/data/apps/<app><br/>"
+        f"/api/data/apps_summary/<app><br/>"
+        )
+
 
 #Return all data from cloudresources db
 @app.route("/api/data")
@@ -85,7 +98,7 @@ def data():
         data_dict['disk'] = float(data.disk)
         data_dict['average'] = float(data.average)
         data_dict['server'] = str(data.server_id)
-        data_dict['server_cost'] = str(data.server_cost)
+        data_dict['server_cost'] = float(data.server_cost)
         #append into dictionary
         all_data.append(data_dict)
     
@@ -124,7 +137,7 @@ def data_summary():
     mean_network = cloud_df.groupby('app_name')['network'].mean()
     mean_disk = cloud_df.groupby('app_name')['disk'].mean()
     total_server = cloud_df.groupby('app_name')['server_id'].count()
-    total_server_cost = cloud_df.groupby('app_name')['disk'].sum()
+    total_server_cost = cloud_df.groupby('app_name')['server_cost'].sum()
 
     #store mean and total into dataframe
     summary_cloud_df = pd.DataFrame({'avg_cpu': mean_cpu,'avg_memory': mean_memory,'avg_network': mean_network,'avg_disk': mean_disk,
@@ -142,7 +155,7 @@ def data_summary():
 #Return data by selected app
 @app.route("/api/data/apps/<app>")
 def app_data(app=None):
-    #sample app route: /app_data/Encryption
+    #sample app route: /api/data/apps/Encryption
     session = Session()
     #app_results = session.query(Cloudresources_data).all()
     app_results = session.query(Cloudresources_data.id, Cloudresources_data.cpu, Cloudresources_data.memory, 
@@ -173,7 +186,7 @@ def app_data(app=None):
 #Return summary by selected app
 @app.route("/api/data/apps_summary/<app>")
 def app_summary(app=None):
-    #sample app route: /app_summary/Encryption
+    #sample app route: /api/data/apps_summary/Encryption
     session = Session()
     #app_results = session.query(Cloudresources_data).all()
     app_results= session.query(Cloudresources_data.id, Cloudresources_data.cpu, Cloudresources_data.memory, 
@@ -206,14 +219,14 @@ def app_summary(app=None):
     avg_network_per_app = app_filtered_df.groupby('app_name')['network'].mean()
     avg_disk_per_app = app_filtered_df.groupby('app_name')['disk'].mean()
 
-    under_performing_df = app_filtered_df[(app_filtered_df['cpu'] <= 0.30) & (app_filtered_df['memory'] <= 0.30) 
-                                & (app_filtered_df['network'] <= 0.30) & (app_filtered_df['disk'] <= 0.30) ]
+    under_performing_df = app_filtered_df[(app_filtered_df['cpu'] <= 0.35) & (app_filtered_df['memory'] <= 0.35) 
+                                & (app_filtered_df['network'] <= 0.35) & (app_filtered_df['disk'] <= 0.35) ]
 
     exceed_performing_df = app_filtered_df[(app_filtered_df['cpu'] >= 0.95) & (app_filtered_df['memory'] >= 0.95) 
                                 & (app_filtered_df['network'] >= 0.95) & (app_filtered_df['disk'] >= 0.95) ]
 
-    average_performing_df = app_filtered_df[((app_filtered_df['cpu'] > 0.30) | (app_filtered_df['memory'] > 0.30)
-                                            | (app_filtered_df['network'] > 0.30) | (app_filtered_df['disk'] > 0.30))
+    average_performing_df = app_filtered_df[((app_filtered_df['cpu'] > 0.35) | (app_filtered_df['memory'] > 0.35)
+                                            | (app_filtered_df['network'] > 0.35) | (app_filtered_df['disk'] > 0.35))
                                             & ((app_filtered_df['cpu'] < 0.95) | (app_filtered_df['memory'] < 0.95)
                                                 | (app_filtered_df['network'] < 0.95) | (app_filtered_df['disk'] < 0.95))
                                         ]
