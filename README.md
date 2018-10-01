@@ -8,7 +8,7 @@
 ###	- Import "cloudresources_cloud_resource_data.sql" from "\public\assets\db\cloudresources_cloud_resource_data.sql"
 ###	OR
 ###	- Import "cloudresources_raw_data.csv" from "\public\assets\db\cloudresources_cloud_resource_data.sql" into mySQL and create schema and table
-####		(make sure database/schema and table are named as "cloudresources" and "cloud_resource_data" and primary key is "id" from csv file.)
+####		(make sure database/schema and table are named as "cloudresources" and "cloud_resource_data" respectively, and the primary key is "id" from csv file.)
 
 ## Before running app.py:
 ###	- update mySQL database connection via app.py file:
